@@ -305,6 +305,37 @@ describe('compress()', function(){
     .end()
   })
 
+  it('should not error when client aborts', function(done){
+    var closed = false
+    var resp
+    var server = createServer({ threshold: 0 }, function (req, res) {
+      resp = res
+      req.on('close', function(){ closed = true })
+      res.setHeader('Content-Type', 'text/plain')
+      res.setHeader('Content-Length', '2048')
+      res.write(new Buffer(1024))
+      res.flush()
+    })
+
+    request(server)
+    .get('/')
+    .set('Accept-Encoding', 'gzip')
+    .request()
+    .on('response', function (res) {
+      var req = this
+      res.headers['content-encoding'].should.equal('gzip')
+      res.once('data', function(){
+        req.abort()
+        setTimeout(function(){
+          closed.should.be.true
+          resp.end(new Buffer(1024))
+          done()
+        }, 10)
+      })
+    })
+    .end()
+  })
+
   describe('threshold', function(){
     it('should not compress responses below the threshold size', function(done){
       var server = createServer({ threshold: '1kb' }, function (req, res) {

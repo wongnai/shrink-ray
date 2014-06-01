@@ -63,11 +63,6 @@ module.exports = function compression(options) {
     var end = res.end
     var stream
 
-    // see #8
-    req.on('close', function(){
-      res.write = res.end = function(){};
-    });
-
     // flush is noop by default
     res.flush = noop;
 
