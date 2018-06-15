@@ -29,7 +29,7 @@ var util = require('util')
 var vary = require('vary')
 var Writable = require('stream').Writable
 var zlib = require('zlib')
-var zopfli = require('node-zopfli')
+var zopfli = require('node-zopfli-es')
 
 /**
  * Module exports.
