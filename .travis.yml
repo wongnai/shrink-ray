@@ -8,15 +8,19 @@ addons:
       - g++-5
 language: node_js
 node_js:
-  - "4.4"
-  - "5.11"
-  - 6
-  - 7
+  - "8.11"
+  - "9.11"
+  - "10.4"
 sudo: false
 cache:
   directories:
     - node_modules
 before_install:
+  # Skip updating shrinkwrap / lock
+  - "npm config set shrinkwrap false"
+
+  - "npm rm --save-dev $(grep -E '\"eslint\\S*\"' package.json | cut -d'\"' -f2)"
+
   # Update Node.js modules
   - "test ! -d node_modules || npm prune"
   - "test ! -d node_modules || npm rebuild"

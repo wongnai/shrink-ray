@@ -29,14 +29,17 @@ project.
 
 ## Install
 
-You must first install `node`, `npm`, and [the node native build
-toolchain](https://github.com/nodejs/node-gyp#installation).
+This is a [Node.js](https://nodejs.org/en/) module available through the
+[npm registry](https://www.npmjs.com/). Installation is done using the
+[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```bash
 $ npm install shrink-ray
 ```
 
 ## API
+
+<!-- eslint-disable no-unused-vars -->
 
 ```js
 var shrinkRay = require('shrink-ray')
@@ -222,9 +225,13 @@ The default `filter` function. This is used to construct a custom filter
 function that is an extension of the default function.
 
 ```js
+var shrinkRay = require('shrink-ray')
+var express = require('express')
+
+var app = express()
 app.use(shrinkRay({filter: shouldCompress}))
 
-function shouldCompress(req, res) {
+function shouldCompress (req, res) {
   if (req.headers['x-no-compression']) {
     // don't compress responses with this request header
     return false
@@ -256,7 +263,7 @@ var express = require('express')
 
 var app = express()
 
-// compress all requests
+// compress all responses
 app.use(shrinkRay())
 
 // add all routes
